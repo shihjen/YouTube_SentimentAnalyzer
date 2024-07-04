@@ -1,0 +1,12 @@
+pandas
+numpy
+streamlit
+google-api-python-client
+matplotlib
+seaborn
+plotly
+nltk
+textblob
+wordcloud
+pillow
+pytube
