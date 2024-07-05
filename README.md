@@ -27,3 +27,6 @@ Subjectivity histogram.
 
 Keywords in the comments visualize via wordcloud.
 
+
+<div>⏩ <a href = "https://shihjen-youtube-sentimentanalyzer-app-7ecszs.streamlit.app/">Web Application</a></div>
+
