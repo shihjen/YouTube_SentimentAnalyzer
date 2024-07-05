@@ -15,19 +15,24 @@ import re
 from textblob import TextBlob
 from PIL import Image
 from pytube import YouTube
+import os
+from dotenv import load_dotenv
 
 # Streamlit page configuration
 st.set_page_config(page_title = 'YouTube Sentiment Analyzer',
-                   page_icon = '',
+                   page_icon = ':double_vertical_bar:',
                    layout = 'centered',
                    initial_sidebar_state = 'auto')
 
 
 st.title('YouTube Sentiment Analyzer')
 st.sidebar.title('User Input')
-key = st.sidebar.text_input('Enter Your Developer Key: ')
+#key = st.sidebar.text_input('Enter Your Developer Key: ')
 url = st.sidebar.text_input('Enter YouTube Video URL')
 submit = st.sidebar.button('Analyze')
+
+load_dotenv()
+key = os.getenv('DEVELOPER_KEY')
 
 # function to collect the comments and return in a dataframe
 def extract_comments(videoId, key):
@@ -216,55 +221,51 @@ It provides instant insight into the most important/frequent terms in text data.
 '''
 
 if submit:
-    if key:
-        if url:
-            videoId = url.split('v=')[1].split('&')[0]
-            data = extract_comments(videoId, key)
-            metadata = get_video_metadata(url)
-            comments_num = data.shape[0]
+    if url:
+        videoId = url.split('v=')[1].split('&')[0]
+        data = extract_comments(videoId, key)
+        metadata = get_video_metadata(url)
+        comments_num = data.shape[0]
 
-            data_copy = data.copy()
-            data_copy['processed_text'] = data_copy['text'].apply(lambda x: text_processing(x))
-            data_copy['polarity_score'] = data_copy['text'].apply(lambda x: polarity(x))
-            data_copy['sentiment'] = data_copy['polarity_score'].apply(lambda x: sentiment_analysis(x))
-            data_copy['subjectivity_score'] = data_copy['text'].apply(lambda x: subjectivity(x))
+        data_copy = data.copy()
+        data_copy['processed_text'] = data_copy['text'].apply(lambda x: text_processing(x))
+        data_copy['polarity_score'] = data_copy['text'].apply(lambda x: polarity(x))
+        data_copy['sentiment'] = data_copy['polarity_score'].apply(lambda x: sentiment_analysis(x))
+        data_copy['subjectivity_score'] = data_copy['text'].apply(lambda x: subjectivity(x))
 
-            container = st.container(border=True)
-            container.markdown(f'### {metadata[0]}')
-            container.write(f'Publish on: {metadata[1]}')
-            container.image(f"http://img.youtube.com/vi/{videoId}/0.jpg", use_column_width=True)
-            container.write(f':timer_clock: Length of video: {round(metadata[3]/60)} minutes')
-            container.write(f':male-technologist: Author: {metadata[4]}')
-            container.write(f':film_projector: Number of Views: {metadata[2]}')
-            container.markdown(f'#### Total Number of Comments: {comments_num}')
+        container = st.container(border=True)
+        container.markdown(f'### {metadata[0]}')
+        container.write(f'Publish on: {metadata[1]}')
+        container.image(f"http://img.youtube.com/vi/{videoId}/0.jpg", use_column_width=True)
+        container.write(f':timer_clock: Length of video: {round(metadata[3]/60)} minutes')
+        container.write(f':male-technologist: Author: {metadata[4]}')
+        container.write(f':film_projector: Number of Views: {metadata[2]}')
+        container.markdown(f'#### Total Number of Comments: {comments_num}')
 
-            container1 = st.container(border=True)
-            hist = polarity_dist(data_copy)
-            container1.markdown('<h3 style="color:red;"> Polarity Score </h3>', unsafe_allow_html=True)
-            container1.markdown(polarity_desc, unsafe_allow_html=True)
-            container1.plotly_chart(hist)
+        container1 = st.container(border=True)
+        hist = polarity_dist(data_copy)
+        container1.markdown('<h3 style="color:red;"> Polarity Score </h3>', unsafe_allow_html=True)
+        container1.markdown(polarity_desc, unsafe_allow_html=True)
+        container1.plotly_chart(hist)
 
-            container2 = st.container(border=True)
-            bar = sentiment_count(data_copy)
-            container2.markdown('<h3 style="color:#FFA500;"> Positive, Neutral & Negative Sentiments </h3>', unsafe_allow_html=True)
-            container2.markdown(sentiment_desc, unsafe_allow_html=True)
-            container2.plotly_chart(bar)
+        container2 = st.container(border=True)
+        bar = sentiment_count(data_copy)
+        container2.markdown('<h3 style="color:#FFA500;"> Positive, Neutral & Negative Sentiments </h3>', unsafe_allow_html=True)
+        container2.markdown(sentiment_desc, unsafe_allow_html=True)
+        container2.plotly_chart(bar)
 
-            container3 = st.container(border=True)
-            hist = subjectivity_dist(data_copy)
-            container3.markdown('<h3 style="color:#9932CC;"> Subjectivity Score </h3>', unsafe_allow_html=True)
-            container3.markdown(subjectivity_desc, unsafe_allow_html=True)
-            container3.plotly_chart(hist)
+        container3 = st.container(border=True)
+        hist = subjectivity_dist(data_copy)
+        container3.markdown('<h3 style="color:#9932CC;"> Subjectivity Score </h3>', unsafe_allow_html=True)
+        container3.markdown(subjectivity_desc, unsafe_allow_html=True)
+        container3.plotly_chart(hist)
 
-            container4 = st.container(border=True)
-            cloud = generate_wordcloud(data_copy)
-            container4.markdown('<h3 style="color:navy;"> Keywords </h3>', unsafe_allow_html=True)
-            container4.markdown(wordcloud_desc, unsafe_allow_html=True)
-            container4.pyplot(cloud)
+        container4 = st.container(border=True)
+        cloud = generate_wordcloud(data_copy)
+        container4.markdown('<h3 style="color:navy;"> Keywords </h3>', unsafe_allow_html=True)
+        container4.markdown(wordcloud_desc, unsafe_allow_html=True)
+        container4.pyplot(cloud)
 
 
-        else:
-            st.warning('Please enter an YouTube video URL.')
     else:
-        st.warning('Please enter your developer key.')
-
+        st.warning('Please enter an YouTube video URL.')
