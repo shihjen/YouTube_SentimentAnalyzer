@@ -8,6 +8,7 @@ import plotly.express as px
 from wordcloud import WordCloud
 import nltk
 nltk.download('wordnet')
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
