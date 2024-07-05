@@ -9,6 +9,7 @@ from wordcloud import WordCloud
 import nltk
 nltk.download('wordnet')
 nltk.download('stopwords')
+nltk.download('punkt')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
