@@ -270,7 +270,7 @@ if submit:
         container4.markdown(wordcloud_desc, unsafe_allow_html=True)
         container4.pyplot(cloud)
       except:
-        print('Unexpected Error Occurs!')
+        st.write('An enexpected error occurs...')
 
 
     else:
