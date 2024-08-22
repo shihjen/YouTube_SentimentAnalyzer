@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 from wordcloud import WordCloud
 import nltk
+nltk.download('punkt_tab')
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('stopwords')
