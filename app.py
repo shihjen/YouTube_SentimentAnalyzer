@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 from wordcloud import WordCloud
 import nltk
+nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('stopwords')
-nltk.download('punkt')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
