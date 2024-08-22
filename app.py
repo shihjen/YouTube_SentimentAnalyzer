@@ -225,6 +225,7 @@ It provides instant insight into the most important/frequent terms in text data.
 
 if submit:
     if url:
+      try:
         videoId = url.split('v=')[1].split('&')[0]
         data = extract_comments(videoId, key)
         metadata = get_video_metadata(url)
@@ -268,6 +269,8 @@ if submit:
         container4.markdown('<h3 style="color:navy;"> Keywords </h3>', unsafe_allow_html=True)
         container4.markdown(wordcloud_desc, unsafe_allow_html=True)
         container4.pyplot(cloud)
+      except:
+        print('Unexpected Error Occurs!')
 
 
     else:
